@@ -8,15 +8,32 @@ module Zenvia
     SEND_SMS = '/send-sms'
     LIST_SMS = '/received/list'
 
+    def self.list_received
+      url = URI.parse(ZENVIA_URL_BASE + LIST_SMS)
+
+      request = Net::HTTP::Post.new(url.path, initheader =
+          {
+              'Content-Type' => 'application/json',
+              'Accept' => 'application/json'
+          })
+
+      request.basic_auth Zenvia.configuration.account, Zenvia.configuration.code
+
+      response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
+        http.request(request)
+      end
+
+      case response
+      when Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK
+        response = JSON.parse(response.body)
+        response["receivedResponse"]["receivedMessages"]
+      else
+        response.body
+      end
+    end
+
     private
 
-    # params {String} - id_sms
-    # params {String} - msg
-    # params {Integer} - cel_phone
-    # params {String} - schedule_date
-    # params {String} - aggregate_id
-    # Example send_to_zenvia("you-id-sms", "message-in-140-caracteres", "5591111111111", "2014-08-22T14:55:00", "111")
-    
     def send_to_zenvia(id_sms, cel_phone, msg, schedule_date, aggregate_id)
       url = URI.parse(ZENVIA_URL_BASE + SEND_SMS)
       
@@ -51,30 +68,6 @@ module Zenvia
         response["sendSmsResponse"]
       else
         resp.body
-      end
-    end
-
-    def self.list_received
-      url = URI.parse(ZENVIA_URL_BASE + LIST_SMS)
-
-      request = Net::HTTP::Post.new(url.path, initheader =
-          {
-              'Content-Type' => 'application/json',
-              'Accept' => 'application/json'
-          })
-
-      request.basic_auth Zenvia.configuration.account, Zenvia.configuration.code
-
-      response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
-        http.request(request)
-      end
-
-      case response
-      when Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK
-        response = JSON.parse(response.body)
-        response["receivedResponse"]["receivedMessages"]
-      else
-        response.body
       end
     end
   end
