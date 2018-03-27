@@ -2,21 +2,6 @@
 
 Ruby API to send sms with Zenvia's REST Api, based on https://github.com/lmorais/zenvia-ruby
 
-### Download and Install
-```
-gem install zenvia-rest-rails
-```
-
-or on your Gemfile:
-```
-gem "zenvia-rest-rails"
-```
-
-and
-```
-bundle install
-```
-
 create zenvia config initializer
 ```
 rails g zenvia:install
