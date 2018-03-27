@@ -17,7 +17,7 @@ Zenvia.configure do |config|
   config.account  = ENV['ZENVIA_ACCOUNT']
   config.code     = ENV['ZENVIA_CODE']
   config.from     = 'name of message sender. Ex. MY BUSINESS'
-  config.callbackOption = 'zenvia callback option. default is NONE'
+  config.callback_option = 'zenvia callback option. default is NONE'
 end
 
 ```
@@ -39,13 +39,13 @@ sms.send
 You can also add two more parameters on 'send' method:
 
 1. schedule_date: String or DateTime
-2. aggregateId: String
+2. aggregate_id: String
 
 ```ruby
 
 require 'zenvia'
 
-# Sending a SMS with schedule_date and aggregateId
+# Sending a SMS with schedule_date and aggregate_id
 
 sms = Zenvia::Sms.new('your-sms-id', 'test message!', '5591999999999', '2016-11-22T18:13:00', '111')
 

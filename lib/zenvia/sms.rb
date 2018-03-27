@@ -2,13 +2,13 @@ module Zenvia
   class Sms
     include Base
 
-    attr_accessor :id_sms, :msg, :cel_phone, :schedule_date, :aggregateId, :status_code
+    attr_accessor :id_sms, :msg, :cel_phone, :schedule_date, :aggregate_id, :status_code
 
-    def initialize(id_sms, msg, cel_phone, schedule_date = "", aggregateId = "")
+    def initialize(id_sms, msg, cel_phone, schedule_date = "", aggregate_id = "")
       @id_sms    = id_sms
       @msg       = msg
       @cel_phone = cel_phone
-      @aggregateId = aggregateId
+      @aggregate_id = aggregate_id
       @schedule_date = schedule_date
       #Try to convert datetime to string
       begin
@@ -18,7 +18,7 @@ module Zenvia
     end
 
     def send
-      response = send_to_zenvia(@id_sms, @cel_phone, @msg, @schedule_date, @aggregateId)
+      response = send_to_zenvia(@id_sms, @cel_phone, @msg, @schedule_date, @aggregate_id)
       self.status_code = response["statusCode"].to_i
       response
     end

@@ -1,11 +1,11 @@
 module Zenvia
   class Configuration
-    attr_accessor :account, :code, :callbackOption, :from
+    attr_accessor :account, :code, :callback_option, :from
 
     def initialize
       @account  = ''
       @code     = ''
-      @callbackOption = ''
+      @callback_option = 'NONE'
       @from     = ''
     end
   end
