@@ -28,9 +28,8 @@ module Zenvia
 
       req.basic_auth Zenvia.configuration.account, Zenvia.configuration.code
 
-      req.body =
-        {
-          "sendSmsRequest": 
+      req.body = {
+          "sendSmsRequest":
           {
             "from": Zenvia.configuration.from,
             "to": cel_phone,
@@ -55,7 +54,7 @@ module Zenvia
       end
     end
 
-    def list_received
+    def self.list_received
       url = URI.parse(ZENVIA_URL_BASE + LIST_SMS)
 
       request = Net::HTTP::Post.new(url.path, initheader =
