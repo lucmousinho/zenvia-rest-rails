@@ -18,7 +18,7 @@ module Zenvia
     end
 
     def send
-      @response = send_to_zenvia(@id_sms, @cel_phone, @msg, @schedule_date, @aggregateId)
+      self.response = send_to_zenvia(@id_sms, @cel_phone, @msg, @schedule_date, @aggregateId)
     end
 
     def sent?
