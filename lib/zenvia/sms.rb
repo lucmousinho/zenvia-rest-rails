@@ -22,6 +22,7 @@ module Zenvia
     end
 
     def sent?
+      p response
       response && response["sendSmsResponse"]["statusCode"].to_i < 4
     rescue
       false
