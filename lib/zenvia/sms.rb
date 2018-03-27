@@ -17,6 +17,30 @@ module Zenvia
       end
     end
 
+    def self.list_received
+      url = URI.parse(ZENVIA_URL_BASE + LIST_SMS)
+
+      request = Net::HTTP::Post.new(url.path, initheader =
+          {
+              'Content-Type' => 'application/json',
+              'Accept' => 'application/json'
+          })
+
+      request.basic_auth Zenvia.configuration.account, Zenvia.configuration.code
+
+      response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
+        http.request(request)
+      end
+
+      case response
+      when Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK
+        response = JSON.parse(response.body)
+        response["receivedResponse"]["receivedMessages"]
+      else
+        response.body
+      end
+    end
+
     def send
       response = send_to_zenvia(@id_sms, @cel_phone, @msg, @schedule_date, @aggregate_id)
       self.status_code = response["statusCode"].to_i
