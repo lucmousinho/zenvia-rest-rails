@@ -51,6 +51,13 @@ sms = Zenvia::Sms.new('your-sms-id', 'test message!', '5591999999999', '2016-11-
 
 sms.send
 
+#=> {"statusCode"=>"00",
+#     "statusDescription"=>"Ok",
+#     "detailCode"=>"000",
+#     "detailDescription"=>"Message Sent"}
+
+sms.sent? #=> true
+
 ```
 
 ### Send Return

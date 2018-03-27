@@ -56,7 +56,6 @@ module Zenvia
       else
         resp.body
       end
-
     end
 
     def parse_json_response(body)

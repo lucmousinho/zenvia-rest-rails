@@ -2,7 +2,7 @@ module Zenvia
   class Sms
     include Base
 
-    attr_accessor :id_sms, :msg, :cel_phone, :schedule_date, :aggregateId
+    attr_accessor :id_sms, :msg, :cel_phone, :schedule_date, :aggregateId, :response
 
     def initialize(id_sms, msg, cel_phone, schedule_date = "", aggregateId = "")
       @id_sms    = id_sms
@@ -18,7 +18,11 @@ module Zenvia
     end
 
     def send
-      send_to_zenvia(@id_sms, @cel_phone, @msg, @schedule_date, @aggregateId)
+      @response = send_to_zenvia(@id_sms, @cel_phone, @msg, @schedule_date, @aggregateId)
+    end
+
+    def sent?
+      response && response["sendSmsResponse"]["statusCode"].to_i < 4
     end
   end
 end
