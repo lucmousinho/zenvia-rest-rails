@@ -6,24 +6,14 @@ module Zenvia
   module Base
     ZENVIA_URL_BASE = 'https://api-rest.zenvia360.com.br/services'
     SEND_SMS = '/send-sms'
+    LIST_SMS = '/received/list'
 
     private
 
-    # params {String} - id_sms
-    # params {String} - msg
-    # params {Integer} - cel_phone
-    # params {String} - schedule_date
-    # params {String} - aggregateId
-    # Example send_to_zenvia("you-id-sms", "message-in-140-caracteres", "5591111111111", "2014-08-22T14:55:00", "111")
-    
-    def send_to_zenvia(id_sms, cel_phone, msg, schedule_date, aggregateId)
-
-      callbackOption = Zenvia.configuration.callbackOption
-      callbackOption = "NONE" if callbackOption.blank?
-
+    def send_to_zenvia(id_sms, cel_phone, msg, schedule_date, aggregate_id)
       url = URI.parse(ZENVIA_URL_BASE + SEND_SMS)
-      
-      req = Net::HTTP::Post.new(url.path, initheader = 
+
+      req = Net::HTTP::Post.new(url.path, initheader =
         {
           'Content-Type' => 'application/json',
           'Accept' => 'application/json'
@@ -31,39 +21,30 @@ module Zenvia
 
       req.basic_auth Zenvia.configuration.account, Zenvia.configuration.code
 
-      req.body =
-        {
-          "sendSmsRequest": 
+      req.body = {
+          "sendSmsRequest":
           {
             "from": Zenvia.configuration.from,
             "to": cel_phone,
             "schedule": schedule_date,
             "msg": msg,
-            "callbackOption": callbackOption,
+            "callbackOption": Zenvia.configuration.callback_option,
             "id": id_sms,
-            "aggregateId": aggregateId
+            "aggregateId": aggregate_id
           }
         }.to_json
 
-      resp = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http| 
+      resp = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
         http.request(req)
       end
 
       case resp
       when Net::HTTPSuccess, Net::HTTPRedirection, Net::HTTPOK
-        # OK
-        parse_json_response(resp.body)
+        response = JSON.parse(resp.body)
+        response["sendSmsResponse"]
       else
         resp.body
       end
-
     end
-
-    def parse_json_response(body)
-      resp = JSON.parse body
-      resp["sendSmsResponse"]
-    end
-
   end
-
 end
