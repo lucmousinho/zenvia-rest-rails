@@ -4,7 +4,7 @@ require 'uri'
 
 module Zenvia
   module Base
-    ZENVIA_URL_BASE = 'https://api-rest.zenvia360.com.br/services'
+    ZENVIA_URL_BASE = 'https://api-rest.zenvia.com/services'
     SEND_SMS = '/send-sms'
     LIST_SMS = '/received/list'
 
